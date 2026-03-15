@@ -1,10 +1,11 @@
-import os
 import discord
 from discord.ext import tasks
 from datetime import datetime
 from zoneinfo import ZoneInfo
+import os
 
 TOKEN = os.getenv("TOKEN")
+
 CHANNEL_ID = 1451901256430915604
 
 intents = discord.Intents.default()
@@ -27,7 +28,6 @@ SCHEDULE = {
     ("Friday", "21:00"): [
         "🛡️ Breaking Army началось! (21:00–23:00)"
     ],
-
     ("Everyday", "21:55"): [
         "⚠️ Guild Party через 5 минут!"
     ],
@@ -43,6 +43,11 @@ last_date = None
 @client.event
 async def on_ready():
     print(f"Бот запущен как {client.user}")
+
+    channel = client.get_channel(CHANNEL_ID)
+    if channel:
+        await channel.send("✅ Бот работает и подключился!")
+
     if not reminder_loop.is_running():
         reminder_loop.start()
 
@@ -62,7 +67,6 @@ async def reminder_loop():
 
     channel = client.get_channel(CHANNEL_ID)
     if channel is None:
-        print("Не удалось найти канал. Проверь CHANNEL_ID.")
         return
 
     keys_to_check = [
@@ -73,8 +77,10 @@ async def reminder_loop():
     for key in keys_to_check:
         if key in SCHEDULE and key not in sent_today:
             messages = SCHEDULE[key]
+
             for message in messages:
                 await channel.send(message)
+
             sent_today.add(key)
 
 
@@ -82,8 +88,5 @@ async def reminder_loop():
 async def before_loop():
     await client.wait_until_ready()
 
-
-if TOKEN is None:
-    raise ValueError("TOKEN не найден. Добавь его в переменные среды.")
 
 client.run(TOKEN)
