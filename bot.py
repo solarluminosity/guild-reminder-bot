@@ -14,25 +14,39 @@ client = discord.Client(intents=intents)
 MSK = ZoneInfo("Europe/Moscow")
 
 SCHEDULE = {
-    ("Monday", "21:30"): [
-        "⚔️ Test Your Skills началось!",
-        "⏰ Guild Party через 30 минут!"
-    ],
-    ("Tuesday", "21:30"): [
-        "⚔️ Test Your Skills началось!",
-        "⏰ Guild Party через 30 минут!"
-    ],
-    ("Wednesday", "21:00"): [
-        "🛡️ Breaking Army началось! (21:00–23:00)"
-    ],
-    ("Friday", "21:00"): [
-        "🛡️ Breaking Army началось! (21:00–23:00)"
-    ],
-    ("Everyday", "21:55"): [
-        "⚠️ Guild Party через 5 минут!"
+    ("Everyday", "21:30"): [
+        "@everyone\n\n⏰ Guild Party начнётся через 30 минут!\n🕒 Сегодня в 22:00 МСК"
     ],
     ("Everyday", "22:00"): [
-        "🔥 Guild Party началось!"
+        "@everyone\n\n🔥 Guild Party началось!\n🕒 Сегодня в 22:00 МСК"
+    ],
+
+    ("Monday", "21:00"): [
+        "@everyone\n\n⏰ Test Your Skills начнётся через 30 минут!\n🕒 Сегодня в 21:30 МСК"
+    ],
+    ("Monday", "21:30"): [
+        "@everyone\n\n⚔️ Test Your Skills началось!\n🕒 Сегодня в 21:30 МСК"
+    ],
+
+    ("Tuesday", "21:00"): [
+        "@everyone\n\n⏰ Test Your Skills начнётся через 30 минут!\n🕒 Сегодня в 21:30 МСК"
+    ],
+    ("Tuesday", "21:30"): [
+        "@everyone\n\n⚔️ Test Your Skills началось!\n🕒 Сегодня в 21:30 МСК"
+    ],
+
+    ("Wednesday", "20:30"): [
+        "@everyone\n\n⏰ Breaking Army начнётся через 30 минут!\n🕒 Сегодня в 21:00–23:00 МСК"
+    ],
+    ("Wednesday", "21:00"): [
+        "@everyone\n\n🛡️ Breaking Army началось!\n🕒 Сегодня в 21:00–23:00 МСК"
+    ],
+
+    ("Friday", "20:30"): [
+        "@everyone\n\n⏰ Breaking Army начнётся через 30 минут!\n🕒 Сегодня в 21:00–23:00 МСК"
+    ],
+    ("Friday", "21:00"): [
+        "@everyone\n\n🛡️ Breaking Army началось!\n🕒 Сегодня в 21:00–23:00 МСК"
     ],
 }
 
@@ -79,7 +93,10 @@ async def reminder_loop():
             messages = SCHEDULE[key]
 
             for message in messages:
-                await channel.send(message)
+                await channel.send(
+                    message,
+                    allowed_mentions=discord.AllowedMentions(everyone=True)
+                )
 
             sent_today.add(key)
 
